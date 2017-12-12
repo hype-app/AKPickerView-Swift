@@ -238,10 +238,10 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
 		}
 	}
 	/// Readwrite. A font which used in NOT selected cells.
-	@IBInspectable public lazy var font = UIFont.systemFont(ofSize: 20)
+    @IBInspectable public lazy var font: UIFont = UIFont.systemFont(ofSize: 20)
 
 	/// Readwrite. A font which used in selected cells.
-	@IBInspectable public lazy var highlightedFont = UIFont.boldSystemFont(ofSize: 20)
+    @IBInspectable public lazy var highlightedFont: UIFont = UIFont.boldSystemFont(ofSize: 20)
 
 	/// Readwrite. A color of the text on NOT selected cells.
 	@IBInspectable public lazy var textColor: UIColor = UIColor.darkGray
