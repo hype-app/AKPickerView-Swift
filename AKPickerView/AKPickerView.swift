@@ -138,7 +138,7 @@ private class AKCollectionViewLayout: UICollectionViewFlowLayout {
 		let visibleRect = CGRect(origin: self.collectionView!.contentOffset, size: self.collectionView!.bounds.size)
 		self.midX = visibleRect.midX;
 		self.width = visibleRect.width / 2;
-		self.maxAngle = CGFloat(M_PI_2);
+		self.maxAngle = CGFloat(Double.pi);
 	}
 
 	fileprivate override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
@@ -152,7 +152,7 @@ private class AKCollectionViewLayout: UICollectionViewFlowLayout {
 				return attributes
 			case .wheel:
 				let distance = attributes.frame.midX - self.midX;
-				let currentAngle = self.maxAngle * distance / self.width / CGFloat(M_PI_2);
+				let currentAngle = self.maxAngle * distance / self.width / CGFloat(Double.pi);
 				var transform = CATransform3DIdentity;
 				transform = CATransform3DTranslate(transform, -distance, 0, -self.width);
 				transform = CATransform3DRotate(transform, currentAngle, 0, 1, 0);
@@ -238,10 +238,10 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
 		}
 	}
 	/// Readwrite. A font which used in NOT selected cells.
-	public lazy var font = UIFont.systemFont(ofSize: 20)
+	@IBInspectable public lazy var font = UIFont.systemFont(ofSize: 20)
 
 	/// Readwrite. A font which used in selected cells.
-	public lazy var highlightedFont = UIFont.boldSystemFont(ofSize: 20)
+	@IBInspectable public lazy var highlightedFont = UIFont.boldSystemFont(ofSize: 20)
 
 	/// Readwrite. A color of the text on NOT selected cells.
 	@IBInspectable public lazy var textColor: UIColor = UIColor.darkGray
@@ -266,7 +266,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
 		}
 	}
 	/// Readwrite. A boolean value indicates whether the mask is disabled.
-	@IBInspectable public var maskDisabled: Bool! = nil {
+	@IBInspectable public var maskDisabled: Bool = false {
 		didSet {
 			self.collectionView.layer.mask = self.maskDisabled == true ? nil : {
 				let maskLayer = CAGradientLayer()
@@ -327,7 +327,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
 		self.intercepter = AKPickerViewDelegateIntercepter(pickerView: self, delegate: self.delegate)
 		self.collectionView.delegate = self.intercepter
 
-		self.maskDisabled = self.maskDisabled == nil ? false : self.maskDisabled
+		self.maskDisabled = self.maskDisabled == false ? false : self.maskDisabled
 	}
 
 	public init() {
