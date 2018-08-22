@@ -424,6 +424,19 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
 			self.selectItem(self.selectedItem, animated: false, notifySelection: false)
 		}
 	}
+	 
+	/**
+	Reload the picker view's contents and styles and position to the preferred index. Call this method always after any property is changed.
+	*/
+    	public func reloadData(index:Int) {
+        	self.invalidateIntrinsicContentSize()
+        	self.collectionView.collectionViewLayout.invalidateLayout()
+        	self.collectionView.reloadData()
+        	if self.dataSource != nil && self.dataSource!.numberOfItemsInPickerView(self) > 0 {
+            	self.selectedItem = index
+            		self.selectItem(self.selectedItem, animated: false, notifySelection: false)
+        	}
+    	}
 
 	/**
 	Move to the cell whose index is given one without selection change.
