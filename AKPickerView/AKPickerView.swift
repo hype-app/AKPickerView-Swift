@@ -276,7 +276,12 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
                     UIColor.black.cgColor,
                     UIColor.black.cgColor,
                     UIColor.clear.cgColor]
-                maskLayer.locations = [0.0, 0.0, 0.66, 1.0]
+                if pickerViewStyle == .wheel{
+                    maskLayer.locations = [0.0, 0.33, 0.66, 1.0]
+                }
+                else{
+                    maskLayer.locations = [0.0, 0.0, 0.66, 1.0]
+                }
                 maskLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
                 maskLayer.endPoint = CGPoint(x: 1.0, y: 0.0)
                 return maskLayer
@@ -577,25 +582,22 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let number = self.collectionView(collectionView, numberOfItemsInSection: section)
-        
-        // THIS IS FOR SELECTED ITEM POSITION AT CENTER OF THE HORIZONTAL PICKER VIEW
-        //let firstIndexPath = IndexPath(item: 0, section: section)
-        //let firstSize = self.collectionView(collectionView, layout: collectionView.collectionViewLayout, sizeForItemAt: firstIndexPath)
-        
         let lastIndexPath = IndexPath(item: number - 1, section: section)
         let lastSize = self.collectionView(collectionView, layout: collectionView.collectionViewLayout, sizeForItemAt: lastIndexPath)
-        
-        // THIS IS FOR SELECTED ITEM POSITION AT CENTER OF THE HORIZONTAL PICKER VIEW
-        //        return UIEdgeInsetsMake(
-        //            0, (collectionView.bounds.size.width - firstSize.width) / 2,
-        //            0, (collectionView.bounds.size.width - lastSize.width) / 2
-        //        )
-        
-        return UIEdgeInsetsMake(
-            0, 0,
-            0, (collectionView.bounds.size.width - lastSize.width)
-        )
-        
+        if pickerViewStyle == .wheel{
+            let firstIndexPath = IndexPath(item: 0, section: section)
+            let firstSize = self.collectionView(collectionView, layout: collectionView.collectionViewLayout, sizeForItemAt: firstIndexPath)
+            return UIEdgeInsetsMake(
+                0, (collectionView.bounds.size.width - firstSize.width) / 2,
+                0, (collectionView.bounds.size.width - lastSize.width) / 2
+            )
+        }
+        else{
+            return UIEdgeInsetsMake(
+                0, 0,
+                0, (collectionView.bounds.size.width - lastSize.width)
+            )
+        }
     }
     
     // MARK: UICollectionViewDelegate
