@@ -54,9 +54,9 @@ private protocol AKCollectionViewLayoutDelegate {
 /**
  Private. A subclass of UICollectionViewCell used in AKPickerView's collection view.
  */
-private class AKCollectionViewCell: UICollectionViewCell {
-    var label: UILabel!
-    var imageView: UIImageView!
+open class AKCollectionViewCell: UICollectionViewCell {
+    open var label: UILabel!
+    open var imageView: UIImageView!
     var font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
     var highlightedFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
     var _selected: Bool = false {
@@ -102,7 +102,7 @@ private class AKCollectionViewCell: UICollectionViewCell {
         self.initialize()
     }
     
-    required init!(coder aDecoder: NSCoder) {
+    required public init!(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.initialize()
     }
@@ -189,7 +189,7 @@ private class AKCollectionViewLayout: UICollectionViewFlowLayout {
  Private. Used to hook UICollectionViewDelegate and throw it AKPickerView,
  and if it conforms to UIScrollViewDelegate, also throw it to AKPickerView's delegate.
  */
-private class AKPickerViewDelegateIntercepter: NSObject, UICollectionViewDelegate {
+open class AKPickerViewDelegateIntercepter: NSObject, UICollectionViewDelegate {
     weak var pickerView: AKPickerView?
     weak var delegate: UIScrollViewDelegate?
     
@@ -198,7 +198,7 @@ private class AKPickerViewDelegateIntercepter: NSObject, UICollectionViewDelegat
         self.delegate = delegate
     }
     
-    fileprivate override func forwardingTarget(for aSelector: Selector) -> Any? {
+    override open func forwardingTarget(for aSelector: Selector) -> Any? {
         if self.pickerView!.responds(to: aSelector) {
             return self.pickerView
         } else if self.delegate != nil && self.delegate!.responds(to: aSelector) {
@@ -208,7 +208,7 @@ private class AKPickerViewDelegateIntercepter: NSObject, UICollectionViewDelegat
         }
     }
     
-    fileprivate override func responds(to aSelector: Selector) -> Bool {
+    open override func responds(to aSelector: Selector) -> Bool {
         if self.pickerView!.responds(to: aSelector) {
             return true
         } else if self.delegate != nil && self.delegate!.responds(to: aSelector) {
@@ -225,7 +225,7 @@ private class AKPickerViewDelegateIntercepter: NSObject, UICollectionViewDelegat
 /**
  Horizontal picker view. This is just a subclass of UIView, contains a UICollectionView.
  */
-public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AKCollectionViewLayoutDelegate {
+open class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AKCollectionViewLayoutDelegate {
     
     // MARK: - Properties
     // MARK: Readwrite Properties
@@ -535,7 +535,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         return self.dataSource != nil ? self.dataSource!.numberOfItemsInPickerView(self) : 0
     }
     
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(AKCollectionViewCell.self), for: indexPath) as! AKCollectionViewCell
         if let title = self.dataSource?.pickerView?(self, titleForItem: indexPath.item) {
             cell.label.text = title
@@ -559,7 +559,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var size = CGSize(width: self.interitemSpacing, height: collectionView.bounds.size.height)
         if let title = self.dataSource?.pickerView?(self, titleForItem: indexPath.item) {
             size.width += self.sizeForString(title as NSString).width
